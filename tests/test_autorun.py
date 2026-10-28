@@ -100,6 +100,20 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertEqual(self.boy.dir, -1)
         self.assertEqual(self.boy.face_dir, -1)
 
+    def test_boundary_reversal_preserves_autorun_deadline(self):
+        self.boy.x = 790
+        self.boy.dir = 1
+        self.boy.start_auto_run()
+        self.boy.auto_run_state.start(now=10)
+        deadline = self.boy.auto_run_state.deadline
+
+        self.boy.auto_run_state.update(now=12)
+
+        self.assertEqual(self.boy.state, 'AUTORUN')
+        self.assertEqual(self.boy.auto_run_state.deadline, deadline)
+        self.assertFalse(self.boy.auto_run_state.is_expired(now=14.9))
+        self.assertTrue(self.boy.auto_run_state.is_expired(now=15))
+
 
 if __name__ == '__main__':
     unittest.main()
