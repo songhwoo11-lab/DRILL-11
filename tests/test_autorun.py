@@ -72,6 +72,18 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertEqual(self.boy.state, 'RUN')
         self.assertEqual(self.boy.dir, -1)
         self.assertEqual(self.boy.face_dir, -1)
+        self.assertIsNone(self.boy.auto_run_state.deadline)
+
+    def test_cancelled_autorun_deadline_cannot_change_later_state(self):
+        self.boy.start_auto_run()
+        self.boy.auto_run_state.start(now=10)
+        self.boy.start_running()
+
+        with patch('autorun_state.time.monotonic', return_value=20):
+            self.boy.update()
+
+        self.assertEqual(self.boy.state, 'RUN')
+        self.assertIsNone(self.boy.auto_run_state.deadline)
 
     def test_autorun_sprite_is_larger_than_run_sprite(self):
         image = RecordingImage()

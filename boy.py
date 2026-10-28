@@ -50,7 +50,7 @@ class Boy:
                     'trigger': 'start_running',
                     'source': ['IDLE', 'SLEEP', 'AUTORUN'],
                     'dest': 'RUN',
-                    'after': 'reset_run_frame',
+                    'after': ['end_auto_run', 'reset_run_frame'],
                 },
                 {
                     'trigger': 'stop_running',
