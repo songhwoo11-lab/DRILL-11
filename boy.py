@@ -1,6 +1,7 @@
 from math import pi
 import time
 
+from autorun_state import AutoRunState
 from pico2d import load_image
 from transitions import Machine
 
@@ -25,13 +26,20 @@ class Boy:
         self.idle_started_at = time.monotonic()
         self.image = load_image('animation_sheet.png')
         self.run_image = load_image('run_animation.png')
+        self.auto_run_state = AutoRunState(self)
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'RUN', 'SLEEP'],
+            states=['IDLE', 'RUN', 'SLEEP', 'AUTORUN'],
             initial='IDLE',
             auto_transitions=False,
             transitions=[
                 {'trigger': 'fall_asleep', 'source': 'IDLE', 'dest': 'SLEEP'},
+                {
+                    'trigger': 'start_auto_run',
+                    'source': ['IDLE', 'AUTORUN'],
+                    'dest': 'AUTORUN',
+                    'after': 'begin_auto_run',
+                },
                 {
                     'trigger': 'start_running',
                     'source': ['IDLE', 'SLEEP'],
@@ -52,6 +60,9 @@ class Boy:
                 },
             ],
         )
+
+    def begin_auto_run(self):
+        self.auto_run_state.start()
 
     def update(self):
         if self.state == 'IDLE':

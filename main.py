@@ -7,17 +7,24 @@ from grass import Grass # grass: 모듈 이름, Grass: 클래스 이름
 # Game object class here
 
 pressed_directions = set()
+pressed_keys = set()
 
 
-def handle_events():
-    global running, pressed_directions
+def handle_events(events=None):
+    global running
 
-    event_list = get_events()
+    event_list = get_events() if events is None else events
     for event in event_list:
         if event.type == SDL_QUIT:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
+            if event.key not in pressed_keys:
+                pressed_keys.add(event.key)
+                boy.start_auto_run()
+        elif event.type == SDL_KEYUP and event.key == SDLK_a:
+            pressed_keys.discard(event.key)
         elif event.type == SDL_KEYDOWN and event.key in (SDLK_LEFT, SDLK_RIGHT):
             if event.key not in pressed_directions:
                 pressed_directions.add(event.key)
@@ -43,6 +50,7 @@ def reset_world():
 
     world = []
     pressed_directions.clear()
+    pressed_keys.clear()
 
     grass = Grass()
     world.append(grass)
@@ -65,15 +73,23 @@ def render_world():
     update_canvas()
 
 
-running = True
+def main():
+    global running
 
-open_canvas()
-reset_world()
-# game loop
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.01)
-# finalization code
-close_canvas()
+    running = True
+    open_canvas()
+    reset_world()
+    while running:
+        handle_events()
+        update_world()
+        render_world()
+        delay(0.01)
+    close_canvas()
+
+
+running = True
+world = []
+
+
+if __name__ == '__main__':
+    main()
