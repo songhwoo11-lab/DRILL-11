@@ -114,6 +114,21 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertFalse(self.boy.auto_run_state.is_expired(now=14.9))
         self.assertTrue(self.boy.auto_run_state.is_expired(now=15))
 
+    def test_autorun_expires_after_five_seconds_to_idle(self):
+        self.boy.start_auto_run()
+        self.boy.auto_run_state.start(now=10)
+
+        with patch('autorun_state.time.monotonic', return_value=14.9):
+            self.boy.update()
+        self.assertEqual(self.boy.state, 'AUTORUN')
+
+        with patch('autorun_state.time.monotonic', return_value=15):
+            self.boy.update()
+
+        self.assertEqual(self.boy.state, 'IDLE')
+        self.assertIsNone(self.boy.auto_run_state.deadline)
+        self.assertEqual(self.boy.idle_started_at, 15)
+
 
 if __name__ == '__main__':
     unittest.main()

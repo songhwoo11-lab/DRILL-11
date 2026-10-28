@@ -41,6 +41,12 @@ class Boy:
                     'after': 'begin_auto_run',
                 },
                 {
+                    'trigger': 'stop_auto_run',
+                    'source': 'AUTORUN',
+                    'dest': 'IDLE',
+                    'after': ['end_auto_run', 'start_idle_timer'],
+                },
+                {
                     'trigger': 'start_running',
                     'source': ['IDLE', 'SLEEP'],
                     'dest': 'RUN',
@@ -64,6 +70,9 @@ class Boy:
     def begin_auto_run(self):
         self.auto_run_state.start()
 
+    def end_auto_run(self):
+        self.auto_run_state.cancel()
+
     def update(self):
         if self.state == 'IDLE':
             self.frame = (self.frame + 1) % 8
@@ -78,7 +87,8 @@ class Boy:
                 self.x = max(min_x, min(self.x, max_x))
                 self.stop_running()
         elif self.state == 'AUTORUN':
-            self.auto_run_state.update()
+            if self.auto_run_state.update():
+                self.stop_auto_run()
 
     def start_idle_timer(self):
         self.idle_started_at = time.monotonic()

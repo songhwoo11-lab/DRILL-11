@@ -26,6 +26,8 @@ class AutoRunState:
         return now >= self.deadline
 
     def update(self, now=None):
+        if self.is_expired(now):
+            return True
         self.boy.run_frame = (self.boy.run_frame + 1) % 8
         self.boy.x += (
             self.boy.dir
@@ -41,4 +43,4 @@ class AutoRunState:
             self.boy.x = max(min_x, min(self.boy.x, max_x))
             self.boy.dir = -self.boy.dir
             self.boy.face_dir = self.boy.dir
-        return self.is_expired(now)
+        return False
