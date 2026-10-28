@@ -99,6 +99,47 @@ class AutoRunInputTests(unittest.TestCase):
             self.boy.update()
         self.assertEqual(self.boy.state, 'SLEEP')
 
+    def test_space_wakes_sleeping_boy(self):
+        self.boy.fall_asleep()
+        event = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_SPACE)
+
+        main.handle_events([event])
+
+        self.assertEqual(self.boy.state, 'IDLE')
+
+    def test_releasing_direction_key_stops_run(self):
+        main.handle_events([
+            SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_RIGHT),
+            SimpleNamespace(type=main.SDL_KEYUP, key=main.SDLK_RIGHT),
+        ])
+
+        self.assertEqual(self.boy.state, 'IDLE')
+
+    def test_escape_and_window_close_still_stop_game(self):
+        main.handle_events([
+            SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_ESCAPE),
+        ])
+        self.assertFalse(main.running)
+
+        main.running = True
+        main.handle_events([SimpleNamespace(type=main.SDL_QUIT, key=None)])
+        self.assertFalse(main.running)
+
+    def test_repressing_a_after_keyup_restarts_autorun_timer(self):
+        key_down = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_a)
+        key_up = SimpleNamespace(type=main.SDL_KEYUP, key=main.SDLK_a)
+
+        with patch('autorun_state.time.monotonic', return_value=10):
+            main.handle_events([key_down])
+        first_deadline = self.boy.auto_run_state.deadline
+        main.handle_events([key_up])
+
+        with patch('autorun_state.time.monotonic', return_value=12):
+            main.handle_events([key_down])
+
+        self.assertEqual(first_deadline, 15)
+        self.assertEqual(self.boy.auto_run_state.deadline, 17)
+
     def test_autorun_sprite_is_larger_than_run_sprite(self):
         image = RecordingImage()
         self.boy.run_image = image
