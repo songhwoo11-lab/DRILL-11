@@ -68,6 +68,7 @@ class Boy:
         )
 
     def begin_auto_run(self):
+        self.run_frame = 0
         self.auto_run_state.start()
 
     def end_auto_run(self):

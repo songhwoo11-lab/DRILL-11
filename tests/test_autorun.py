@@ -129,6 +129,27 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertIsNone(self.boy.auto_run_state.deadline)
         self.assertEqual(self.boy.idle_started_at, 15)
 
+    def test_expiry_restores_idle_rendering_and_stops_auto_run_motion(self):
+        idle_image = RecordingImage()
+        run_image = RecordingImage()
+        self.boy.image = idle_image
+        self.boy.run_image = run_image
+        self.boy.run_frame = 6
+        self.boy.start_auto_run()
+        self.boy.auto_run_state.start(now=10)
+        self.boy.x = 400
+
+        with patch('autorun_state.time.monotonic', return_value=15):
+            self.boy.update()
+        expired_x = self.boy.x
+        self.boy.draw()
+
+        self.assertEqual(self.boy.state, 'IDLE')
+        self.assertEqual(self.boy.x, expired_x)
+        self.assertEqual(len(idle_image.draw_calls), 1)
+        self.assertEqual(run_image.draw_calls, [])
+        self.assertEqual(self.boy.run_frame, 0)
+
 
 if __name__ == '__main__':
     unittest.main()
