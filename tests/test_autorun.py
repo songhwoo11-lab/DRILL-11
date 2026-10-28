@@ -227,6 +227,31 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertEqual(run_image.draw_calls, [])
         self.assertEqual(self.boy.run_frame, 0)
 
+    def test_world_input_update_and_render_complete_autorun_cycle(self):
+        with patch('main.Grass') as grass_class, patch(
+            'main.Boy', return_value=self.boy
+        ):
+            main.reset_world()
+        grass = grass_class.return_value
+        start_x = self.boy.x
+        key_down = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_a)
+
+        with patch('autorun_state.time.monotonic', return_value=10):
+            main.handle_events([key_down])
+        self.assertEqual(self.boy.state, 'AUTORUN')
+
+        with patch('autorun_state.time.monotonic', return_value=10.1):
+            main.update_world()
+        self.assertGreater(self.boy.x, start_x)
+
+        with patch('main.clear_canvas'), patch('main.update_canvas'):
+            main.render_world()
+        grass.draw.assert_called_once()
+
+        with patch('autorun_state.time.monotonic', return_value=15):
+            main.update_world()
+        self.assertEqual(self.boy.state, 'IDLE')
+
 
 if __name__ == '__main__':
     unittest.main()
