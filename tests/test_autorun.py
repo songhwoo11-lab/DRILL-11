@@ -77,6 +77,18 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertGreater(auto_run_size[0], run_size[0])
         self.assertGreater(auto_run_size[1], run_size[1])
 
+    def test_autorun_moves_faster_than_run(self):
+        self.boy.start_running()
+        self.boy.update()
+        run_distance = self.boy.x - 400
+
+        self.boy.x = 400
+        self.boy.start_auto_run()
+        self.boy.update()
+        auto_run_distance = self.boy.x - 400
+
+        self.assertGreater(auto_run_distance, run_distance)
+
 
 if __name__ == '__main__':
     unittest.main()

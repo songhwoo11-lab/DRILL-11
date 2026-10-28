@@ -26,4 +26,10 @@ class AutoRunState:
         return now >= self.deadline
 
     def update(self, now=None):
+        self.boy.run_frame = (self.boy.run_frame + 1) % 8
+        self.boy.x += (
+            self.boy.dir
+            * self.boy.RUN_SPEED
+            * self.SPEED_MULTIPLIER
+        )
         return self.is_expired(now)
