@@ -36,7 +36,7 @@ class Boy:
                 {'trigger': 'fall_asleep', 'source': 'IDLE', 'dest': 'SLEEP'},
                 {
                     'trigger': 'start_auto_run',
-                    'source': ['IDLE', 'AUTORUN'],
+                    'source': ['IDLE', 'RUN', 'AUTORUN'],
                     'dest': 'AUTORUN',
                     'after': 'begin_auto_run',
                 },

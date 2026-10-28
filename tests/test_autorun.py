@@ -27,6 +27,14 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertEqual(self.boy.state, 'AUTORUN')
         self.assertIsNotNone(self.boy.auto_run_state.deadline)
 
+    def test_a_key_starts_autorun_from_run(self):
+        self.boy.start_running()
+        event = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_a)
+
+        main.handle_events([event])
+
+        self.assertEqual(self.boy.state, 'AUTORUN')
+
     def test_repeated_keydown_does_not_restart_autorun_timer(self):
         event = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_a)
         main.handle_events([event])
