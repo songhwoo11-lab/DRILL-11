@@ -18,6 +18,9 @@ class AutoRunState:
     def cancel(self):
         self.deadline = None
 
+    def return_to_run(self):
+        self.boy.start_running()
+
     def is_expired(self, now=None):
         if self.deadline is None:
             return False
@@ -27,6 +30,7 @@ class AutoRunState:
 
     def update(self, now=None):
         if self.is_expired(now):
+            self.boy.stop_auto_run()
             return True
         self.boy.run_frame = (self.boy.run_frame + 1) % 8
         self.boy.x += (

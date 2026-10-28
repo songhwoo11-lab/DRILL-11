@@ -30,7 +30,9 @@ def handle_events(events=None):
                 pressed_directions.add(event.key)
                 boy.dir = -1 if event.key == SDLK_LEFT else 1
                 boy.face_dir = boy.dir
-                if boy.state in ('IDLE', 'SLEEP', 'AUTORUN'):
+                if boy.state == 'AUTORUN':
+                    boy.auto_run_state.return_to_run()
+                elif boy.state in ('IDLE', 'SLEEP'):
                     boy.start_running()
         elif event.type == SDL_KEYUP and event.key in (SDLK_LEFT, SDLK_RIGHT):
             pressed_directions.discard(event.key)

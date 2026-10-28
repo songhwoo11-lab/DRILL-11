@@ -88,8 +88,7 @@ class Boy:
                 self.x = max(min_x, min(self.x, max_x))
                 self.stop_running()
         elif self.state == 'AUTORUN':
-            if self.auto_run_state.update():
-                self.stop_auto_run()
+            self.auto_run_state.update()
 
     def start_idle_timer(self):
         self.idle_started_at = time.monotonic()
