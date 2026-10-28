@@ -154,6 +154,21 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertGreater(auto_run_size[0], run_size[0])
         self.assertGreater(auto_run_size[1], run_size[1])
 
+    def test_autorun_sprite_keeps_original_ground_contact(self):
+        image = RecordingImage()
+        self.boy.run_image = image
+        self.boy.start_running()
+        self.boy.draw()
+        run_call = image.draw_calls[-1]
+        run_bottom = run_call[5] - run_call[7] / 2
+
+        self.boy.start_auto_run()
+        self.boy.draw()
+        auto_run_call = image.draw_calls[-1]
+        auto_run_bottom = auto_run_call[5] - auto_run_call[7] / 2
+
+        self.assertEqual(auto_run_bottom, run_bottom)
+
     def test_autorun_moves_faster_than_run(self):
         self.boy.start_running()
         self.boy.update()
