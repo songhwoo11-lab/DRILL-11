@@ -89,6 +89,17 @@ class AutoRunInputTests(unittest.TestCase):
 
         self.assertGreater(auto_run_distance, run_distance)
 
+    def test_autorun_reverses_at_scaled_screen_boundary(self):
+        self.boy.x = 790
+        self.boy.dir = 1
+        self.boy.start_auto_run()
+
+        self.boy.update()
+
+        self.assertEqual(self.boy.x, 725)
+        self.assertEqual(self.boy.dir, -1)
+        self.assertEqual(self.boy.face_dir, -1)
+
 
 if __name__ == '__main__':
     unittest.main()

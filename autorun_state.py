@@ -32,4 +32,13 @@ class AutoRunState:
             * self.boy.RUN_SPEED
             * self.SPEED_MULTIPLIER
         )
+        half_width = (
+            self.boy.HALF_SPRITE_WIDTH * self.SCALE_MULTIPLIER
+        )
+        min_x = half_width
+        max_x = self.boy.SCREEN_WIDTH - half_width
+        if self.boy.x <= min_x or self.boy.x >= max_x:
+            self.boy.x = max(min_x, min(self.boy.x, max_x))
+            self.boy.dir = -self.boy.dir
+            self.boy.face_dir = self.boy.dir
         return self.is_expired(now)
