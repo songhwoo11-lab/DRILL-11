@@ -1,52 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650">
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
     </marker>
     <style>
       text { font-family: "Segoe UI", "Malgun Gothic", sans-serif; fill: #172033; }
-      .title { font-size: 22px; font-weight: 700; }
-      .state { fill: #e8f1ff; stroke: #3166ad; stroke-width: 2; }
-      .state-sleep { fill: #edf0f5; stroke: #596579; stroke-width: 2; }
-      .label { font-size: 16px; }
-      .hint { font-size: 14px; fill: #475569; }
+      .title { font-size: 26px; font-weight: 700; }
+      .state-label { font-size: 20px; font-weight: 700; }
+      .transition-label { font-size: 15px; }
+      .note { font-size: 14px; fill: #475569; }
+      .state { fill: #e8f1ff; stroke: #3166ad; stroke-width: 2.5; }
+      .sleep { fill: #edf0f5; stroke: #596579; stroke-width: 2.5; }
+      .autorun { fill: #fff1cc; stroke: #c47b10; stroke-width: 2.5; }
       .arrow { fill: none; stroke: #334155; stroke-width: 2; marker-end: url(#arrow); }
+      .autorun-arrow { fill: none; stroke: #c47b10; stroke-width: 2.5; marker-end: url(#arrow); }
       .panel { fill: #fff; stroke: #cbd5e1; stroke-width: 1.5; }
     </style>
   </defs>
-  <rect width="1000" height="500" fill="#f8fafc"/>
-  <rect class="panel" x="20" y="20" width="440" height="460" rx="14"/>
-  <rect class="panel" x="480" y="20" width="500" height="460" rx="14"/>
+  <rect width="1100" height="650" fill="#f8fafc"/>
+  <rect class="panel" x="24" y="24" width="1052" height="602" rx="16"/>
+  <text class="title" x="550" y="70" text-anchor="middle">캐릭터 전체 상태 다이어그램</text>
 
-  <text class="title" x="240" y="62" text-anchor="middle">변경 전 상태 머신</text>
-  <rect class="state" x="60" y="165" width="150" height="70" rx="35"/>
-  <text class="label" x="135" y="208" text-anchor="middle">IDLE</text>
-  <rect class="state-sleep" x="280" y="165" width="150" height="70" rx="35"/>
-  <text class="label" x="355" y="208" text-anchor="middle">SLEEP</text>
-  <path class="arrow" d="M210 180 C235 145 255 145 280 180"/>
-  <text class="label" x="245" y="132" text-anchor="middle">5초 경과</text>
-  <path class="arrow" d="M280 220 C255 255 235 255 210 220"/>
-  <text class="label" x="245" y="282" text-anchor="middle">Space</text>
+  <rect class="state" x="90" y="160" width="165" height="76" rx="38"/>
+  <text class="state-label" x="172" y="207" text-anchor="middle">IDLE</text>
+  <rect class="state" x="405" y="160" width="165" height="76" rx="38"/>
+  <text class="state-label" x="487" y="207" text-anchor="middle">RUN</text>
+  <rect class="autorun" x="755" y="285" width="220" height="86" rx="43"/>
+  <text class="state-label" x="865" y="337" text-anchor="middle">AUTORUN</text>
+  <rect class="sleep" x="90" y="430" width="165" height="76" rx="38"/>
+  <text class="state-label" x="172" y="477" text-anchor="middle">SLEEP</text>
 
-  <text class="title" x="730" y="62" text-anchor="middle">변경 후 상태 머신</text>
-  <rect class="state" x="515" y="170" width="135" height="70" rx="35"/>
-  <text class="label" x="582" y="213" text-anchor="middle">IDLE</text>
-  <rect class="state" x="690" y="170" width="135" height="70" rx="35"/>
-  <text class="label" x="757" y="213" text-anchor="middle">RUN</text>
-  <rect class="state-sleep" x="840" y="320" width="135" height="70" rx="35"/>
-  <text class="label" x="907" y="363" text-anchor="middle">SLEEP</text>
+  <path class="arrow" d="M255 177 C300 145 355 145 405 177"/>
+  <text class="transition-label" x="330" y="142" text-anchor="middle">좌/우 누름</text>
+  <path class="arrow" d="M405 220 C355 252 300 252 255 220"/>
+  <text class="transition-label" x="330" y="280" text-anchor="middle">방향키 해제</text>
+  <path class="arrow" d="M172 236 L172 430"/>
+  <text class="transition-label" x="186" y="340">5초 경과</text>
+  <path class="arrow" d="M115 430 L115 236"/>
+  <text class="transition-label" x="45" y="340">Space</text>
 
-  <path class="arrow" d="M650 180 C665 150 675 150 690 180"/>
-  <text class="hint" x="670" y="132" text-anchor="middle">좌/우 누름</text>
-  <path class="arrow" d="M690 230 C675 260 665 260 650 230"/>
-  <text class="hint" x="670" y="288" text-anchor="middle">키 뗌 / 화면 끝</text>
-  <path class="arrow" d="M610 240 C630 330 780 390 840 365"/>
-  <text class="hint" x="700" y="355" text-anchor="middle">5초 경과</text>
-  <path class="arrow" d="M840 335 C775 300 650 300 610 240"/>
-  <text class="hint" x="730" y="312" text-anchor="middle">Space</text>
-  <path class="arrow" d="M875 320 C855 260 825 235 800 220"/>
-  <text class="hint" x="870" y="275" text-anchor="middle">좌/우 누름</text>
+  <path class="autorun-arrow" d="M245 190 C420 82 640 112 770 288"/>
+  <text class="transition-label" x="500" y="105">A 누름</text>
+  <path class="autorun-arrow" d="M560 220 C640 240 700 277 755 311"/>
+  <text class="transition-label" x="643" y="230">A 누름</text>
+  <path class="autorun-arrow" d="M255 465 C470 570 650 475 785 369"/>
+  <text class="transition-label" x="510" y="526">A 누름</text>
 
-  <text class="hint" x="730" y="430" text-anchor="middle">RUN은 하나의 상태이며 dir 값으로 좌/우 이동</text>
-  <text class="hint" x="730" y="454" text-anchor="middle">IDLE 복귀 시 수면 타이머 재시작</text>
+  <path class="autorun-arrow" d="M755 350 C680 390 615 320 560 220"/>
+  <text class="transition-label" x="647" y="370">좌/우 누름: RUN</text>
+  <path class="autorun-arrow" d="M830 285 C800 222 855 205 900 285"/>
+  <text class="transition-label" x="865" y="205" text-anchor="middle">A 재입력: 5초 재시작</text>
+  <path class="autorun-arrow" d="M930 285 C1015 245 1015 390 920 371"/>
+  <text class="transition-label" x="1008" y="319" text-anchor="middle">경계: 방향 반전</text>
+  <path class="autorun-arrow" d="M755 335 C585 450 390 390 255 220"/>
+  <text class="transition-label" x="510" y="414">5초 경과: IDLE</text>
+
+  <text class="note" x="550" y="590" text-anchor="middle">RUN은 방향값으로 이동하며 화면 끝에서 정지한다. AUTORUN은 확대·고속으로 이동하고 경계에서 반전한다.</text>
 </svg>
