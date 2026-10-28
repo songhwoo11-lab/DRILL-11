@@ -85,15 +85,18 @@ class Boy:
         self.run_frame = 0
 
     def draw(self):
-        if self.state == 'RUN':
+        if self.state in ('RUN', 'AUTORUN'):
+            size = 100
+            if self.state == 'AUTORUN':
+                size *= self.auto_run_state.SCALE_MULTIPLIER
             if self.dir == 1:
                 self.run_image.clip_draw(
-                    self.run_frame * 100, 0, 100, 100, self.x, self.y
+                    self.run_frame * 100, 0, 100, 100, self.x, self.y, size, size
                 )
             else:
                 self.run_image.clip_composite_draw(
                     self.run_frame * 100, 0, 100, 100, 0, 'h',
-                    self.x, self.y, 100, 100,
+                    self.x, self.y, size, size,
                 )
             return
 

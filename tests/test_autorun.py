@@ -6,6 +6,17 @@ import main
 from boy import Boy
 
 
+class RecordingImage:
+    def __init__(self):
+        self.draw_calls = []
+
+    def clip_draw(self, *args):
+        self.draw_calls.append(args)
+
+    def clip_composite_draw(self, *args):
+        self.draw_calls.append(args)
+
+
 class AutoRunInputTests(unittest.TestCase):
     def setUp(self):
         with patch('boy.load_image'):
@@ -51,6 +62,20 @@ class AutoRunInputTests(unittest.TestCase):
         main.handle_events([event])
 
         self.assertEqual(self.boy.auto_run_state.deadline, deadline)
+
+    def test_autorun_sprite_is_larger_than_run_sprite(self):
+        image = RecordingImage()
+        self.boy.run_image = image
+        self.boy.start_running()
+        self.boy.draw()
+        run_size = image.draw_calls[-1][-2:]
+
+        self.boy.start_auto_run()
+        self.boy.draw()
+        auto_run_size = image.draw_calls[-1][-2:]
+
+        self.assertGreater(auto_run_size[0], run_size[0])
+        self.assertGreater(auto_run_size[1], run_size[1])
 
 
 if __name__ == '__main__':
