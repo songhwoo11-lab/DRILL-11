@@ -85,6 +85,20 @@ class AutoRunInputTests(unittest.TestCase):
         self.assertEqual(self.boy.state, 'RUN')
         self.assertIsNone(self.boy.auto_run_state.deadline)
 
+    def test_idle_sleep_timer_restarts_after_autorun_expires(self):
+        self.boy.start_auto_run()
+        self.boy.auto_run_state.start(now=10)
+        with patch('autorun_state.time.monotonic', return_value=15):
+            self.boy.update()
+
+        with patch('autorun_state.time.monotonic', return_value=19.9):
+            self.boy.update()
+        self.assertEqual(self.boy.state, 'IDLE')
+
+        with patch('autorun_state.time.monotonic', return_value=20):
+            self.boy.update()
+        self.assertEqual(self.boy.state, 'SLEEP')
+
     def test_autorun_sprite_is_larger_than_run_sprite(self):
         image = RecordingImage()
         self.boy.run_image = image
