@@ -48,7 +48,7 @@ class Boy:
                 },
                 {
                     'trigger': 'start_running',
-                    'source': ['IDLE', 'SLEEP'],
+                    'source': ['IDLE', 'SLEEP', 'AUTORUN'],
                     'dest': 'RUN',
                     'after': 'reset_run_frame',
                 },

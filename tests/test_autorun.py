@@ -63,6 +63,16 @@ class AutoRunInputTests(unittest.TestCase):
 
         self.assertEqual(self.boy.auto_run_state.deadline, deadline)
 
+    def test_direction_key_returns_autorun_to_run(self):
+        self.boy.start_auto_run()
+        event = SimpleNamespace(type=main.SDL_KEYDOWN, key=main.SDLK_LEFT)
+
+        main.handle_events([event])
+
+        self.assertEqual(self.boy.state, 'RUN')
+        self.assertEqual(self.boy.dir, -1)
+        self.assertEqual(self.boy.face_dir, -1)
+
     def test_autorun_sprite_is_larger_than_run_sprite(self):
         image = RecordingImage()
         self.boy.run_image = image
